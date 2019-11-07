@@ -44,7 +44,7 @@ Path AStarPlanner::find_path(int agent_id, const list<Constraint>& constraints, 
     while (!open.empty()) {
         auto curr = open.top();
         open.pop();
-        if (curr->timestep >= 20) {
+        if (curr->timestep >= ins.totalSquares*2) {
             break;
         }
 

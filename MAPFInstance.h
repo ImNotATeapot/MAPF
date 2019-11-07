@@ -10,6 +10,7 @@ public:
     vector<int> start_locations;
     vector<int> goal_locations;
     int num_of_agents;
+    int totalSquares;
 
     // return true if the location is blocked by an obstacle.
     inline bool blocked(int location) const {return my_map[location]; }

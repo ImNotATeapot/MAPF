@@ -32,10 +32,12 @@ vector<Path> CBS::find_solution() {
     open.push(root);
 
     while (!open.empty()) {
+
         // TODO: implement the high-level of CBS
         //get lowest cost node
         auto current = open.top();
         open.pop();
+
 
         // is collision free?
         bool collisionExists = false;
@@ -56,15 +58,15 @@ vector<Path> CBS::find_solution() {
             }
         }
 
-        // // print
-        // cout << endl;
-        // for (int agent=0; agent<numAgents;agent++) {
-        //     for (int cost=0; cost<current->cost; cost++) {
-        //         cout << positions[cost][agent] << " ";
-        //     }
-        //     cout << endl;
-        // }
-        // cout << "----------------";
+        // print
+        cout << endl;
+        for (int agent=0; agent<numAgents;agent++) {
+            for (int cost=0; cost<current->cost; cost++) {
+                cout << positions[cost][agent] << " ";
+            }
+            cout << endl;
+        }
+        cout << "----------------";
 
         for (int time=0; time<current->cost; time++){
             // cout << "time: " << time << endl;
@@ -82,7 +84,8 @@ vector<Path> CBS::find_solution() {
                             //impose constraint on b
                             constraints.remove(make_tuple(i,collision,-1,time));
                             constraints.push_back(make_tuple(i,collision,-1,time));
-                            // cout << "\tvertex collision at " << time << ": ("<< positions[time][i] << ", " << positions[time][agent] << ")\n"; 
+                            cout << "\tvertex collision at " << time << ": ("<< positions[time][i] << ", " << positions[time][agent] << ")\n"; 
+                            break;
                         }
 
                         //edge collision
@@ -99,10 +102,14 @@ vector<Path> CBS::find_solution() {
                                 //impose constraint on b
                                 constraints.remove(make_tuple(i,b,a,time));
                                 constraints.push_back(make_tuple(i,b,a,time));
-                                // cout << "\tedge collision at (" << positions[time][i] << ", " << time << ")\n"; 
+                                cout << "\tedge collision at (" << positions[time][i] << ", " << time << ")\n"; 
+                                break;
                             }
                         }
                     } 
+                }
+                if (!collisionExists) {
+                    break;
                 }
             }
         }//end collisions
@@ -118,24 +125,24 @@ vector<Path> CBS::find_solution() {
             bool duplicate = false;
             for (auto c : q-> constraints) {
                 if (c == constraint) {
-                    // cout << "Duplicate tuple " << get<1>(constraint)<<endl;
+                    cout << "Duplicate tuple " << get<1>(constraint)<<endl;
                     duplicate = true;
                     break;
                 }
             }
             if (duplicate) {continue;}
-            // cout << "Adding constraint node: " << get<1>(constraint)<<endl;
+            cout << "Adding constraint node: " << get<1>(constraint)<<endl;
             q->constraints.push_back(constraint);
             q->paths = current->paths;
             int a = get<0>(constraint);
 
 
             Path path = a_star.find_path(a, q->constraints,current->cost);
-            // cout << "The new path is: \n";
-            // for (auto pos: path) {
-            //     cout << " " << pos;
-            // }
-            // cout << endl;
+            cout << "The new path is: \n";
+            for (auto pos: path) {
+                cout << " " << pos;
+            }
+            cout << endl;
 
             //check whether to add this new path 
             if (!(path.empty())) {
@@ -146,22 +153,22 @@ vector<Path> CBS::find_solution() {
                 }
                 open.push(q);
 
-                // cout <<"This new node has paths:";
-                // for (auto path: q->paths) {
-                //     for (int pos : path) {
-                //         cout << " " << pos;
-                //     }
-                //     cout << endl;
-                // }
-                // cout << endl;
-                // cout <<"This new node has constraints:";
-                // for (auto cons: q->constraints) {
-                //     cout << "(" << get<0>(cons);
-                //     cout << ", " << get<1>(cons);
-                //     cout << ", " << get<2>(cons);
-                //     cout << ", " << get<3>(cons) << ")\n";
-                // }
-                // cout << endl;
+                cout <<"This new node has paths:";
+                for (auto path: q->paths) {
+                    for (int pos : path) {
+                        cout << " " << pos;
+                    }
+                    cout << endl;
+                }
+                cout << endl;
+                cout <<"This new node has constraints:";
+                for (auto cons: q->constraints) {
+                    cout << "(" << get<0>(cons);
+                    cout << ", " << get<1>(cons);
+                    cout << ", " << get<2>(cons);
+                    cout << ", " << get<3>(cons) << ")\n";
+                }
+                cout << endl;
             }
         }
     }

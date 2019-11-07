@@ -7,7 +7,7 @@ bool MAPFInstance::load_instance(const string& fname) {
     if (myfile.is_open()) {
         myfile >> rows >> cols; // read the size of the map
         my_map.resize(rows * cols);
-
+        totalSquares = rows*cols;
         // read map
         char c;
         for (int i = 0; i < rows; i++) {
