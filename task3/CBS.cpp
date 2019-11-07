@@ -45,10 +45,16 @@ vector<Path> CBS::find_solution() {
         list<Constraint> constraints;
 
         //populate positiosn array
+        int longestPath = 0;
+        for (auto path : current->paths) {
+            if (path.size()+1 > longestPath) {
+                longestPath = path.size()+1;
+            }
+        }
         for (int agent=0; agent<numAgents; agent++) {
             Path path = current->paths[agent];
             int goalstate;
-            for (int time=0; time<current->cost; time++) {
+            for (int time=0; time<longestPath; time++) {
                 if (time >= path.size()) {
                     positions[time][agent] = goalstate;
                 } else {
@@ -68,7 +74,7 @@ vector<Path> CBS::find_solution() {
         // }
         // cout << "----------------";
 
-        for (int time=0; time<current->cost; time++){
+        for (int time=0; time<longestPath; time++){
             // cout << "time: " << time << endl;
             //loop through agents
             for (int agent=0; agent<numAgents; agent++) {
@@ -84,8 +90,8 @@ vector<Path> CBS::find_solution() {
                             //impose constraint on b
                             constraints.remove(make_tuple(i,collision,-1,time));
                             constraints.push_back(make_tuple(i,collision,-1,time));
-                            // cout << "\tvertex collision at " << time << ": ("<< positions[time][i] << ", " << positions[time][agent] << ")\n"; 
-                            break;
+                            // cout << "\tvertex collision at " << time << ": ("<< positions[time][i] << ", " << positions[time][agent] << ")\n";
+                            break; 
                         }
 
                         //edge collision
@@ -107,13 +113,22 @@ vector<Path> CBS::find_solution() {
                             }
                         }
                     } 
+                    if (collisionExists) {
+                        break;
+                    }
                 }
-                if (!collisionExists) {
+                if (collisionExists) {
                     break;
                 }
             }
+
+            if (collisionExists) {
+                    break;
+            }
+
         }//end collisions
         if (!collisionExists) {
+            cout << "There are no more collisions";
             return current->paths;
         }
 
@@ -122,21 +137,16 @@ vector<Path> CBS::find_solution() {
             auto q = new CBSNode();
             all_nodes.push_back(q);
             q->constraints = current->constraints;
-            bool duplicate = false;
-            for (auto c : q-> constraints) {
-                if (c == constraint) {
-                    duplicate = true;
-                    break;
-                }
-            }
-            if (duplicate) {continue;}
-            // cout << "Adding constraint node: " << get<1>(constraint)<<endl;
+
+            
             q->constraints.push_back(constraint);
             q->paths = current->paths;
             int a = get<0>(constraint);
 
 
-            Path path = a_star.find_path(a, q->constraints,current->cost);
+            Path path = a_star.find_path(a, q->constraints,longestPath);
+
+            // cout << "Adding constraint node: " << get<1>(constraint)<<endl;
             // cout << "The new path is: \n";
             // for (auto pos: path) {
             //     cout << " " << pos;
