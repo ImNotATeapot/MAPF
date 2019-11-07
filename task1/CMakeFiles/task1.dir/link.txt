@@ -1,0 +1,1 @@
+/Library/Developer/CommandLineTools/usr/bin/c++   -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/task1.dir/Users/Pearl/Desktop/code/AStarPlanner.cpp.o CMakeFiles/task1.dir/Users/Pearl/Desktop/code/MAPFInstance.cpp.o CMakeFiles/task1.dir/task1.cpp.o  -o task1 

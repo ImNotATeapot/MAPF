@@ -1,0 +1,3 @@
+/Users/Pearl/Desktop/code/task0/CMakeFiles/rebuild_cache.dir
+/Users/Pearl/Desktop/code/task0/CMakeFiles/edit_cache.dir
+/Users/Pearl/Desktop/code/task0/CMakeFiles/task0.dir
